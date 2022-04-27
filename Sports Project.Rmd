@@ -5,3 +5,24 @@ date: "4/27/2022"
 output: html_document
 ---
 
+```{r}
+sports <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2022/2022-03-29/sports.csv')
+
+library(tidyverse)
+
+read_clean <- function(year) {
+  raw_df <- readxl::read_excel(glue::glue("2022/2022-03-29/EADA_{year}-{as.double(year)+1}/Schools.xlsx"))
+
+  clean_df <- raw_df %>%
+    select(
+      unitid, institution_name, city_txt:SUM_PARTIC_WOMEN,
+      REV_MEN:TOTAL_REV_MENWOMEN, EXP_MEN:TOTAL_EXP_MENWOMEN, Sports
+    ) %>%
+    janitor::clean_names() %>%
+    mutate(year = as.integer(year), .before = 1) %>%
+    type_convert()
+
+  clean_df
+}
+```
+
