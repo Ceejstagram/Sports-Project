@@ -57,15 +57,18 @@ read_clean <- function(year) {
 
 ```{r}
 sports_1 <- sports %>% 
-  filter(year == 2015) %>% 
   select(year, sum_partic_men, sum_partic_women, sports) %>% 
   drop_na(sum_partic_men, sum_partic_women, year, sports) %>% 
   filter(sports %in% c("Basketball", "Swimming", "Soccer", "Golf", "Tennis")) %>% 
-  mutate(total_men = cumsum(sum_partic_men), total_women = cumsum(sum_partic_women))
+  mutate(total = cumsum(sum_partic_men + sum_partic_women))
   
-sports_1 %>% 
-  ggplot(aes(x = total_men, y = sports)) +
-  geom_col()
+sports_graph <-sports_1 %>% 
+  ggplot(aes(x = year, y = total, color = sports)) +
+  geom_col() +
+  labs(title = "Growth of participation in popular college sports", x = "Year", y = "Total Number of Male and Female Participants")
+
+ggplotly(sports_graph)
+  
 ```
 
 
